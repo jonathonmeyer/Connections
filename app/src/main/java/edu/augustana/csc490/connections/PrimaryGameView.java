@@ -6,19 +6,13 @@ import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import java.util.ArrayList;
-/*
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
-*/
+
 import java.util.Random;
 
 /**
@@ -37,14 +31,9 @@ public class PrimaryGameView extends SurfaceView implements SurfaceHolder.Callba
     Random r = new Random();
 
     private TimeKeeper keeper;
-    private int x;
-    private int y;
-    private long startTime;
-    private long totalTime;
-    private int screenWidth;
-    private int screenHeight;
-
-    private int changeDelay = 30;
+    //If using an emulator change this delay to something smaller like 10 or so
+    private static final int CHANGE_DELAY = 25;
+    private int currentDelay;
     private int previousSize;
     private int previousIndex;
 
@@ -52,25 +41,21 @@ public class PrimaryGameView extends SurfaceView implements SurfaceHolder.Callba
 
     private Paint myPaint;
     private Paint backgroundPaint;
-    private Paint boxPaint;
 
     public PrimaryGameView(Context context, AttributeSet atts)
     {
 
         super(context, atts);
         mainActivity = (Activity) context;
-        //Log.v("MainGameView", "Right after the view is created");
+
 
         getHolder().addCallback(this);
         gameDots =  new ArrayList<>(1);
-       /* gameDots.add(new Circle(250,250,50));
-        gameDots.add(new Circle(600,600,50));
-        gameDots.get(0).setTarget(true);*/
         myPaint = new Paint();
         myPaint.setColor(Color.BLUE);
         backgroundPaint = new Paint();
-        backgroundPaint.setColor(Color.GRAY);
-
+        backgroundPaint.setColor(Color.WHITE);
+        currentDelay=CHANGE_DELAY;
         keeper = new TimeKeeper();
     }
 
@@ -81,18 +66,15 @@ public class PrimaryGameView extends SurfaceView implements SurfaceHolder.Callba
         super.onSizeChanged(w, h, oldw, oldh);
         Log.v("ONSizeChNGED", "w: " + w + "h: " + h);
         dotsSet = false;
-        screenWidth = w;
-        screenHeight = h;
+
 
         startNewGame();
         keeper.start();
-        startTime = System.nanoTime();
     }
 
     public void startNewGame()
     {
-        //this.x = 250;
-        //this.y = 250;
+
 
         if (isGameOver)
         {
@@ -109,44 +91,40 @@ public class PrimaryGameView extends SurfaceView implements SurfaceHolder.Callba
                     initDots(canvas);
                 }
                 canvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(), backgroundPaint);
-                changeDelay--;
-                if (changeDelay == 0) {
+                currentDelay--;
+                if (currentDelay == 0) {
                     if(gameDots.size()>1) {
                         int nextCircle = r.nextInt(gameDots.size());
                         gameDots.get(nextCircle).setTarget(true);
                         if (gameDots.size() == previousSize) {
                             if (nextCircle != previousIndex) {
-                                // Log.v(TAG, "previousIndex: "+previousIndex);
+
                                 gameDots.get(previousIndex).setTarget(false);
                             }
                         }
                         previousIndex = nextCircle;
                         previousSize = gameDots.size();
-                        changeDelay = 30;
+                        currentDelay=CHANGE_DELAY;
                     }else if(gameDots.size()<=1){
                         gameDots.get(0).setTarget(true);
                     }
                 }
                 for (Circle d : dots) {
                     canvas.drawCircle(d.getX(), d.getY(), (float) d.getRadius(), d.getColor());
-                    //canvas.drawRect(d.getX()-d.getRadius(), d.getY()-d.getRadius(), 600, 750, boxPaint);
                 }
 
             }
         }
     }
 
-    // stop the game; may be called by the MainGameFragment onPause
     public void stopGame()
     {
         if (gameThread != null)
             gameThread.setRunning(false);
     }
 
-    // release resources; may be called by MainGameFragment onDestroy
     public void releaseResources()
     {
-        // release any resources (e.g. SoundPool stuff)
     }
 
     @Override
@@ -202,7 +180,6 @@ public class PrimaryGameView extends SurfaceView implements SurfaceHolder.Callba
                         Intent intent = new Intent(mainActivity,HomeScreen.class );
                         intent.putExtra("longTime", keeper.longElapsedTime());
                         intent.putExtra("stringTime", keeper.stringElapsedTime());
-//                        startActivity(intent);
                         mainActivity.finish();
                         mainActivity.startActivity(intent);
                     }
@@ -249,7 +226,6 @@ public class PrimaryGameView extends SurfaceView implements SurfaceHolder.Callba
                     // lock the surfaceHolder for drawing
                     synchronized(surfaceHolder)
                     {
-                       // gameStep();         // update game state
                         updateView(canvas, gameDots); // draw using the canvas
                     }
                     Thread.sleep(1); // if you want to slow down the action...
@@ -265,7 +241,9 @@ public class PrimaryGameView extends SurfaceView implements SurfaceHolder.Callba
             }
         }
     }
-
+/*In a nutshell this method takes a canvas of a given size and calculates where
+    to place 25 identical dots equal distance apart.
+*/
     private void initDots(Canvas canvas){
         int tenthWidth = canvas.getWidth()/10;
         int tenthHeight = canvas.getHeight()/10;

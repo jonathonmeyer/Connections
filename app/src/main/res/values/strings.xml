@@ -1,11 +1,11 @@
 <resources>
-    <string name="app_name">Connections</string>
+    <string name="app_name">Accurate Reaction</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_home_screen">HomeScreen</string>
+    <string name="title_activity_home_screen">Accurate Reaction</string>
     <string name="gameRules">The object of the game is to remove all of the dots. One dot at a time will turn red and you must click the circle before it turns back to black and another turns red. At the end you will be notified of your time.</string>
 </resources>
