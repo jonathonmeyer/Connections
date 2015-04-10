@@ -21,7 +21,6 @@ public class Game_Screen_Fragment extends Fragment {
         super.onCreateView(inflater, container, savedInstanceState);
         View view =
                 inflater.inflate(R.layout.fragment_game_screen, container, false);
-        Log.v("MainGameFragment", "Right Before the view is found");
         primeGameView = (PrimaryGameView) view.findViewById(R.id.PrimaryGameview);
         return view;
     }

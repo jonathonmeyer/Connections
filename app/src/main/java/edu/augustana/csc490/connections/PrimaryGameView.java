@@ -32,7 +32,7 @@ public class PrimaryGameView extends SurfaceView implements SurfaceHolder.Callba
 
     private TimeKeeper keeper;
     //If using an emulator change this delay to something smaller like 10 or so
-    private static final int CHANGE_DELAY = 25;
+    private static final int CHANGE_DELAY = 50;
     private int currentDelay;
     private int previousSize;
     private int previousIndex;
@@ -64,7 +64,6 @@ public class PrimaryGameView extends SurfaceView implements SurfaceHolder.Callba
     protected void onSizeChanged(int w, int h, int oldw, int oldh)
     {
         super.onSizeChanged(w, h, oldw, oldh);
-        Log.v("ONSizeChNGED", "w: " + w + "h: " + h);
         dotsSet = false;
 
 
@@ -179,8 +178,7 @@ public class PrimaryGameView extends SurfaceView implements SurfaceHolder.Callba
                         keeper.stopTime();
                         Intent intent = new Intent(mainActivity,HomeScreen.class );
                         intent.putExtra("longTime", keeper.longElapsedTime());
-                        intent.putExtra("stringTime", keeper.stringElapsedTime());
-                        mainActivity.finish();
+//                        intent.putExtra("stringTime", keeper.stringElapsedTime());
                         mainActivity.startActivity(intent);
                     }
                 }

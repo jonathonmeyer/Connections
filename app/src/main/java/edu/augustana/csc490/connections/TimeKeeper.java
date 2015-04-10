@@ -17,7 +17,7 @@ public class TimeKeeper {
     public long longElapsedTime(){
         return (endTime-startTIme)/1000000;
     }
-    public String stringElapsedTime(){
+  /*  public String stringElapsedTime(){
         Long elapsedTime = longElapsedTime() ;
         long ms =elapsedTime%1000;
         long seconds = (elapsedTime/1000)%60;
@@ -25,5 +25,12 @@ public class TimeKeeper {
         String formattedTime = String.format("%d"+":"+"%02d"+"."+"%03d",minutes,seconds,ms);
         return formattedTime;
         //simple test
+    }*/
+    public static String formatTime(long timeElapsed){
+        long ms =timeElapsed%1000;
+        long seconds = (timeElapsed/1000)%60;
+        long minutes = (timeElapsed/1000)/60;
+        String formattedTime = String.format("%d"+":"+"%02d"+"."+"%03d",minutes,seconds,ms);
+        return formattedTime;
     }
 }
