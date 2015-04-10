@@ -32,7 +32,7 @@ public class PrimaryGameView extends SurfaceView implements SurfaceHolder.Callba
 
     private TimeKeeper keeper;
     //If using an emulator change this delay to something smaller like 10 or so
-    private static final int CHANGE_DELAY = 50;
+    private static final int CHANGE_DELAY = 30;
     private int currentDelay;
     private int previousSize;
     private int previousIndex;
